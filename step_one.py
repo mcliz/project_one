@@ -13,8 +13,19 @@ data = make_blobs(n_samples=200,centers=2,random_state=8)
 
 X,y = data
 
+clf = KNeighborsClassifier()
+clf.fit(X,y)
+x_min, x_max = X[:,0].min() - 1, X[:,0].max() + 1
+y_min, y_max = X[:,1].min() - 1, X[:,1].max() + 1
+xx,yy = np.meshgrid(np.arange(x_min,x_max, .02),
+                    np.arange(y_min,y_max, .02))
+Z = clf.predict(np.c_[xx.ravel(),yy.ravel()])
+Z = Z.reshape(xx.shape)
 
-
-plt.scatter(X[:,0],X[:,1],c=y, cmap=plt.cm.spring,edgecolors='k')
+plt.pcolormesh(xx,yy,Z, cmap=plt.cm.get_cmap('Pastel1'))
+plt.scatter(X[:,0],X[:,1],c=y, cmap=plt.cm.get_cmap('spring'),edgecolors='k')
+plt.xlim(xx.min(),xx.max())
+plt.ylim(yy.min(),yy.max())
+plt.title("Classifier:KNN")
 plt.show()
 
